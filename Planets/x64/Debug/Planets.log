@@ -1,0 +1,5 @@
+﻿  Planet.cpp
+  Planets.cpp
+C:\Users\Данил\Desktop\Planets\Planets\Planet.h(2,10): error C1083:  Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory,
+  Создание кода...
+C:\Users\Данил\Desktop\Planets\Planets\Planets.cpp(1,10): error C1083:  Не удается открыть файл включение: SFML/Graphics.hpp: No such file or directory,
