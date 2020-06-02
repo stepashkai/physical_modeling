@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 #include <cmath>
@@ -7,29 +7,29 @@
 #include "planet.hpp"
 #include <ctime>
 
-//перечисление с состояниями программы
+//РїРµСЂРµС‡РёСЃР»РµРЅРёРµ СЃ СЃРѕСЃС‚РѕСЏРЅРёСЏРјРё РїСЂРѕРіСЂР°РјРјС‹
 enum State
 {
     SOLAR, SANDBOX, MENU
 };
 
 
-std::vector<Planet*> planets; //коллекция планет
-sf::View *defaultCamera; //позиция и размер камеры по умолчанию
+std::vector<Planet*> planets; //РєРѕР»Р»РµРєС†РёСЏ РїР»Р°РЅРµС‚
+sf::View defaultCamera; //РїРѕР·РёС†РёСЏ Рё СЂР°Р·РјРµСЂ РєР°РјРµСЂС‹ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 
-//создание планеты
-//выходные данные - указатель на созданную планету
-//входные данные
-//posX - позиция планеты по Х
-//posY - позиция планеты по Y
-//vX - скорость планеты по X
-//vY - скорость планеты по Y
-//aX - ускорение планеты по X
-//aY - ускорение планеты по Y
-//mass - масса планеты
-//d - диаметр планеты
-//rotation - вращение планеты
-//filepath - путь к фалу текстуры
+//СЃРѕР·РґР°РЅРёРµ РїР»Р°РЅРµС‚С‹
+//РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРѕР·РґР°РЅРЅСѓСЋ РїР»Р°РЅРµС‚Сѓ
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//posX - РїРѕР·РёС†РёСЏ РїР»Р°РЅРµС‚С‹ РїРѕ РҐ
+//posY - РїРѕР·РёС†РёСЏ РїР»Р°РЅРµС‚С‹ РїРѕ Y
+//vX - СЃРєРѕСЂРѕСЃС‚СЊ РїР»Р°РЅРµС‚С‹ РїРѕ X
+//vY - СЃРєРѕСЂРѕСЃС‚СЊ РїР»Р°РЅРµС‚С‹ РїРѕ Y
+//aX - СѓСЃРєРѕСЂРµРЅРёРµ РїР»Р°РЅРµС‚С‹ РїРѕ X
+//aY - СѓСЃРєРѕСЂРµРЅРёРµ РїР»Р°РЅРµС‚С‹ РїРѕ Y
+//mass - РјР°СЃСЃР° РїР»Р°РЅРµС‚С‹
+//d - РґРёР°РјРµС‚СЂ РїР»Р°РЅРµС‚С‹
+//rotation - РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹
+//filepath - РїСѓС‚СЊ Рє С„Р°Р»Сѓ С‚РµРєСЃС‚СѓСЂС‹
 Planet *InitPlanet(double posX, double posY, double vX, double vY, double aX, double aY, double mass, double d, double rotation, std::string filepath)
 {
     sf::Vector2f pos(posX, posY);
@@ -37,13 +37,13 @@ Planet *InitPlanet(double posX, double posY, double vX, double vY, double aX, do
     sf::Vector2f a(aX, aY);
     sf::Texture texture;
     texture.loadFromFile(filepath);
-    Planet* planet = new Planet(texture, pos, v, a, mass, d, rotation);
+    Planet *planet = new Planet(filepath, pos, v, a, mass, d, rotation);
     return planet;
 }
 
-//удаление планеты
-//входные данные
-//i - индекс планеты в векторе планет
+//СѓРґР°Р»РµРЅРёРµ РїР»Р°РЅРµС‚С‹
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//i - РёРЅРґРµРєСЃ РїР»Р°РЅРµС‚С‹ РІ РІРµРєС‚РѕСЂРµ РїР»Р°РЅРµС‚
 void DeleteAt(int i)
 {
     if(i >= 0 && i < planets.size())
@@ -53,7 +53,7 @@ void DeleteAt(int i)
     }
 }
 
-//удаление всех планет в векторе планет
+//СѓРґР°Р»РµРЅРёРµ РІСЃРµС… РїР»Р°РЅРµС‚ РІ РІРµРєС‚РѕСЂРµ РїР»Р°РЅРµС‚
 void Clear()
 {
     while(planets.size()> 0)
@@ -62,26 +62,26 @@ void Clear()
     }
 }
 
-//инициализация солнечной системы
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРѕР»РЅРµС‡РЅРѕР№ СЃРёСЃС‚РµРјС‹
 void InitSolarSystem()
 {
-    planets.push_back(InitPlanet(595, 360, 0, 0, 0, 0, 1.989E30, 40, 100, "resources\\planets\\0.png"));//солнце
-    planets.push_back(InitPlanet(445, 360, 0, -0.000029783, 0, 0, 5.972E24, 10, 150, "resources\\planets\\1.png"));//земля
-    planets.push_back(InitPlanet(537, 360, 0, -0.00004787, 0, 0, 3.33022E23, 4, 100, "resources\\planets\\2.png"));//меркурий
-    planets.push_back(InitPlanet(487, 360, 0, -0.00003502, 0, 0, 4.867E24, 12, 150, "resources\\planets\\3.png"));//венера
-    planets.push_back(InitPlanet(389, 360, 0, -0.00002413, 0, 0, 6.39E23, 8, -150, "resources\\planets\\4.png"));//марс
-    planets.push_back(InitPlanet(-183, 360, 0, -0.00001307, 0, 0, 1.898E27, 30, -70, "resources\\planets\\5.png"));//юпитер
-    planets.push_back(InitPlanet(-835, 360, 0, -0.00000969, 0, 0, 5683E26, 30, -50, "resources\\planets\\6.png"));//сатурн
-    planets.push_back(InitPlanet(-2266, 360, 0, -0.00000681, 0, 0, 8.681E25, 25, 100, "resources\\planets\\7.png"));//уран
-    planets.push_back(InitPlanet(-3955, 360, 0, -0.00000543, 0, 0, 1.024E26, 30, -100, "resources\\planets\\8.png"));//нептун
+    planets.push_back(InitPlanet(595, 360, 0, 0, 0, 0, 1.989E30, 40, 100, "resources\\planets\\0.png"));//СЃРѕР»РЅС†Рµ
+    planets.push_back(InitPlanet(445, 360, 0, -0.000029783, 0, 0, 5.972E24, 10, 150, "resources\\planets\\1.png"));//Р·РµРјР»СЏ
+    planets.push_back(InitPlanet(537, 360, 0, -0.00004787, 0, 0, 3.33022E23, 4, 100, "resources\\planets\\2.png"));//РјРµСЂРєСѓСЂРёР№
+    planets.push_back(InitPlanet(487, 360, 0, -0.00003502, 0, 0, 4.867E24, 12, 150, "resources\\planets\\3.png"));//РІРµРЅРµСЂР°
+    planets.push_back(InitPlanet(389, 360, 0, -0.00002413, 0, 0, 6.39E23, 8, -150, "resources\\planets\\4.png"));//РјР°СЂСЃ
+    planets.push_back(InitPlanet(-183, 360, 0, -0.00001307, 0, 0, 1.898E27, 30, -70, "resources\\planets\\5.png"));//СЋРїРёС‚РµСЂ
+    planets.push_back(InitPlanet(-835, 360, 0, -0.00000969, 0, 0, 5683E26, 30, -50, "resources\\planets\\6.png"));//СЃР°С‚СѓСЂРЅ
+    planets.push_back(InitPlanet(-2266, 360, 0, -0.00000681, 0, 0, 8.681E25, 25, 100, "resources\\planets\\7.png"));//СѓСЂР°РЅ
+    planets.push_back(InitPlanet(-3955, 360, 0, -0.00000543, 0, 0, 1.024E26, 30, -100, "resources\\planets\\8.png"));//РЅРµРїС‚СѓРЅ
 }
 
-//создание label
-//выходные данные - объект типа tgui::Label::Ptr
-//входные данные
-//text - текст на форме
-//x - позиция по X
-//y - позиция по Y
+//СЃРѕР·РґР°РЅРёРµ label
+//РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ - РѕР±СЉРµРєС‚ С‚РёРїР° tgui::Label::Ptr
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//text - С‚РµРєСЃС‚ РЅР° С„РѕСЂРјРµ
+//x - РїРѕР·РёС†РёСЏ РїРѕ X
+//y - РїРѕР·РёС†РёСЏ РїРѕ Y
 tgui::Label::Ptr CreateLabel(std::string text, int x, int y)
 {
     tgui::Label::Ptr label = tgui::Label::create();
@@ -93,12 +93,12 @@ tgui::Label::Ptr CreateLabel(std::string text, int x, int y)
     return label;
 }
 
-//создание textbox
-//выходные данные - объект типа tgui::TextBox::Ptr
-//входные данные
-//text - текст на форме
-//x - позиция по X
-//y - позиция по Y
+//СЃРѕР·РґР°РЅРёРµ textbox
+//РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ - РѕР±СЉРµРєС‚ С‚РёРїР° tgui::TextBox::Ptr
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//text - С‚РµРєСЃС‚ РЅР° С„РѕСЂРјРµ
+//x - РїРѕР·РёС†РёСЏ РїРѕ X
+//y - РїРѕР·РёС†РёСЏ РїРѕ Y
 tgui::TextBox::Ptr CreateTextBox(std::string text, int x, int y)
 {
     tgui::TextBox::Ptr textBox = tgui::TextBox::create();
@@ -108,20 +108,20 @@ tgui::TextBox::Ptr CreateTextBox(std::string text, int x, int y)
     return textBox;
 }
 
-//смена статуса приложения на меню
-//входные данные
-//status - объект перечисления для изменения статуса приложения
-//camera - объект камеры
+//СЃРјРµРЅР° СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ РЅР° РјРµРЅСЋ
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//status - РѕР±СЉРµРєС‚ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ
+//camera - РѕР±СЉРµРєС‚ РєР°РјРµСЂС‹
 void SetMenu(State &status, sf::View &camera)
 {
-    camera = sf::View(*defaultCamera);
+    camera = sf::View(defaultCamera);
     status = State::MENU;
     Clear();
 }
 
-//смена статуса приложения на симуляцию солнечной системы
-//входные данные
-//status - объект перечисления для изменения статуса приложения
+//СЃРјРµРЅР° СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ РЅР° СЃРёРјСѓР»СЏС†РёСЋ СЃРѕР»РЅРµС‡РЅРѕР№ СЃРёСЃС‚РµРјС‹
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//status - РѕР±СЉРµРєС‚ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ
 void SetSolar(State &status)
 {
     status = State::SOLAR;
@@ -136,18 +136,18 @@ int main()
     srand(time(0));
 
 
-    sf::Texture menuT, sandboxT, exitT, solarT; //инициализация текстур для кнопок меню
-    menuT.loadFromFile("resources\\interface\\menu.png"); //установка пути к текстуре
-    menuT.setSmooth(true); //устанвка размытия текстуры
+    sf::Texture menuT, sandboxT, exitT, solarT; //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚РµРєСЃС‚СѓСЂ РґР»СЏ РєРЅРѕРїРѕРє РјРµРЅСЋ
+    menuT.loadFromFile("resources\\interface\\menu.png"); //СѓСЃС‚Р°РЅРѕРІРєР° РїСѓС‚Рё Рє С‚РµРєСЃС‚СѓСЂРµ
+    menuT.setSmooth(true); //СѓСЃС‚Р°РЅРІРєР° СЂР°Р·РјС‹С‚РёСЏ С‚РµРєСЃС‚СѓСЂС‹
     sandboxT.loadFromFile("resources\\interface\\sandbox.png");
     sandboxT.setSmooth(true);
     exitT.loadFromFile("resources\\interface\\exit.png");
     exitT.setSmooth(true);
     solarT.loadFromFile("resources\\interface\\solar.png");
     solarT.setSmooth(true);
-    sf::Sprite menu, sandbox, exit, solar, back; //инициализация спратов для кнопок меню
-    menu.setTexture(menuT); //установка текстуры в спрайт
-    menu.setScale(2.0/3.0, 2.0/3.0); //установка размеров спрайта
+    sf::Sprite menu, sandbox, exit, solar, back; //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРїСЂР°С‚РѕРІ РґР»СЏ РєРЅРѕРїРѕРє РјРµРЅСЋ
+    menu.setTexture(menuT); //СѓСЃС‚Р°РЅРѕРІРєР° С‚РµРєСЃС‚СѓСЂС‹ РІ СЃРїСЂР°Р№С‚
+    menu.setScale(2.0/3.0, 2.0/3.0); //СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂРѕРІ СЃРїСЂР°Р№С‚Р°
     sandbox.setTexture(sandboxT);
     sandbox.setScale(0.75, 0.75);
     exit.setTexture(exitT);
@@ -156,14 +156,14 @@ int main()
     solar.setScale(0.75, 0.75);
 
 
-    State state = State::MENU; //установка начального статуса приложения
+    State state = State::MENU; //СѓСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»СЊРЅРѕРіРѕ СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ
 
 
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Planets"); //создание окна
-    tgui::Gui gui(window); //создание менеджера интерфейса
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Planets"); //СЃРѕР·РґР°РЅРёРµ РѕРєРЅР°
+    tgui::Gui gui(window); //СЃРѕР·РґР°РЅРёРµ РјРµРЅРµРґР¶РµСЂР° РёРЅС‚РµСЂС„РµР№СЃР°
 
 
-    tgui::TextBox::Ptr vXTextBox = CreateTextBox("0", window.getSize().x - 100 - 5, 5); //создание текстбоксов для ввода параметров планет
+    tgui::TextBox::Ptr vXTextBox = CreateTextBox("0", window.getSize().x - 100 - 5, 5); //СЃРѕР·РґР°РЅРёРµ С‚РµРєСЃС‚Р±РѕРєСЃРѕРІ РґР»СЏ РІРІРѕРґР° РїР°СЂР°РјРµС‚СЂРѕРІ РїР»Р°РЅРµС‚
     gui.add(vXTextBox);
 
     tgui::Label::Ptr vXLabel = CreateLabel("Vx(mln km/c)", window.getSize().x - vXTextBox->getSize().x - 105, 5);
@@ -196,7 +196,7 @@ int main()
     tgui::Label::Ptr timerLabel = CreateLabel("Time Multiplier", 5, 5);
     gui.add(timerLabel);
 
-    tgui::Slider::Ptr timerMultiplier = tgui::Slider::create(1, 1000000); //добавление слайдера, которым можно регулировать ускорение времени
+    tgui::Slider::Ptr timerMultiplier = tgui::Slider::create(1, 1000000); //РґРѕР±Р°РІР»РµРЅРёРµ СЃР»Р°Р№РґРµСЂР°, РєРѕС‚РѕСЂС‹Рј РјРѕР¶РЅРѕ СЂРµРіСѓР»РёСЂРѕРІР°С‚СЊ СѓСЃРєРѕСЂРµРЅРёРµ РІСЂРµРјРµРЅРё
     timerMultiplier->setPosition(timerLabel->getSize().x + 10,7);
     timerMultiplier->setStep(1);
     timerMultiplier->setSize(850, timerMultiplier->getSize().y);
@@ -208,18 +208,18 @@ int main()
 
 
 
-    sf::Clock timer; //таймер для симуляции
-    sf::View camera; //объект камеры
+    sf::Clock timer; //С‚Р°Р№РјРµСЂ РґР»СЏ СЃРёРјСѓР»СЏС†РёРё
+    sf::View camera; //РѕР±СЉРµРєС‚ РєР°РјРµСЂС‹
     camera.setSize((sf::Vector2f)window.getSize());
     bool isDrag = false;
     sf::Vector2i startPos;
     sf::Vector2f oldCenter;
     camera.setCenter(window.getSize().x / 2, window.getSize().y / 2);
     planets.reserve(1000);
-    defaultCamera = new sf::View(camera);
+    defaultCamera = sf::View(camera);
 
 
-    menu.setPosition(sf::Vector2f(0,0)); //установка позиций элементов меню
+    menu.setPosition(sf::Vector2f(0,0)); //СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР·РёС†РёР№ СЌР»РµРјРµРЅС‚РѕРІ РјРµРЅСЋ
     solar.setPosition(sf::Vector2f(window.getSize().x/2 - solarT.getSize().x * solar.getScale().x/2, 330));
     sandbox.setPosition(sf::Vector2f(window.getSize().x/2 - sandboxT.getSize().x * sandbox.getScale().x/2, 430));
     exit.setPosition(sf::Vector2f(window.getSize().x/2 - exitT.getSize().x * exit.getScale().x/2, 530));
@@ -230,54 +230,54 @@ int main()
 
     for (int i = 0; i < planets.size(); i++)
     {
-        planets.at(i)->sprite->setPosition(*planets.at(i)->position); //установка позиций спрайтов всех планет
+        planets.at(i)->sprite.setPosition(planets.at(i)->position); //СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР·РёС†РёР№ СЃРїСЂР°Р№С‚РѕРІ РІСЃРµС… РїР»Р°РЅРµС‚
     }
 
     while (window.isOpen())
     {
         sf::Event event;
-        while (window.pollEvent(event)) //обработка событий
+        while (window.pollEvent(event)) //РѕР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№
         {
-            if (event.type == sf::Event::Closed) //событие закрытия окна
+            if (event.type == sf::Event::Closed) //СЃРѕР±С‹С‚РёРµ Р·Р°РєСЂС‹С‚РёСЏ РѕРєРЅР°
             {
                 window.close();
             }
-            if(state == State::SOLAR || state == State::SANDBOX) //обработка событий, когда активна симуляция
+            if(state == State::SOLAR || state == State::SANDBOX) //РѕР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№, РєРѕРіРґР° Р°РєС‚РёРІРЅР° СЃРёРјСѓР»СЏС†РёСЏ
             {
                 gui.handleEvent(event);
-                if (event.type == sf::Event::MouseWheelMoved) //событие при вращении колесика мыши
+                if (event.type == sf::Event::MouseWheelMoved) //СЃРѕР±С‹С‚РёРµ РїСЂРё РІСЂР°С‰РµРЅРёРё РєРѕР»РµСЃРёРєР° РјС‹С€Рё
                 {
-                    camera.zoom(1 - (float)event.mouseWheel.delta * 0.05); //изменение размера области отрисовки
+                    camera.zoom(1 - (float)event.mouseWheel.delta * 0.05); //РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° РѕР±Р»Р°СЃС‚Рё РѕС‚СЂРёСЃРѕРІРєРё
                 }
-                if (event.type == sf::Event::KeyPressed) //обработка событий нажатия клавиш
+                if (event.type == sf::Event::KeyPressed) //РѕР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№ РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
                 {
-                    if (event.key.code == sf::Keyboard::D) //если нажата клавиша D
+                    if (event.key.code == sf::Keyboard::D) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р° D
                     {
                         if (planets.size() > 0)
                         {
-                            DeleteAt(planets.size() - 1); //удалить последнюю планету
+                            DeleteAt(planets.size() - 1); //СѓРґР°Р»РёС‚СЊ РїРѕСЃР»РµРґРЅСЋСЋ РїР»Р°РЅРµС‚Сѓ
                         }
                     }
-                    if (event.key.code == sf::Keyboard::Escape) //если нажата Esc
+                    if (event.key.code == sf::Keyboard::Escape) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° Esc
                     {
-                        SetMenu(state, camera); //выйти в меню
+                        SetMenu(state, camera); //РІС‹Р№С‚Рё РІ РјРµРЅСЋ
                     }
                 }
-                if (event.type == sf::Event::MouseButtonPressed) //обработка событий нажатия кнопки мыши
+                if (event.type == sf::Event::MouseButtonPressed) //РѕР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё РјС‹С€Рё
                 {
-                    if (event.mouseButton.button == sf::Mouse::Right) //если нажата правая кнопка
+                    if (event.mouseButton.button == sf::Mouse::Right) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° РїСЂР°РІР°СЏ РєРЅРѕРїРєР°
                     {
                         isDrag = true;
-                        startPos = sf::Mouse::getPosition(); //запомнить центр камеры и место нажатия для перемещаения области отрисовки
+                        startPos = sf::Mouse::getPosition(); //Р·Р°РїРѕРјРЅРёС‚СЊ С†РµРЅС‚СЂ РєР°РјРµСЂС‹ Рё РјРµСЃС‚Рѕ РЅР°Р¶Р°С‚РёСЏ РґР»СЏ РїРµСЂРµРјРµС‰Р°РµРЅРёСЏ РѕР±Р»Р°СЃС‚Рё РѕС‚СЂРёСЃРѕРІРєРё
                         oldCenter = camera.getCenter();
                     }
-                    if(event.mouseButton.button == sf::Mouse::Left) //если нажата левая кнопка
+                    if(event.mouseButton.button == sf::Mouse::Left) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° Р»РµРІР°СЏ РєРЅРѕРїРєР°
                     {
                         int x = event.mouseButton.x;
                         int y = event.mouseButton.y;
                         if((y > 30 || x > 1000 ) && (x < 1170 || y > 130))
                         {
-                            try //считать введенные данные и создать планету на их основе
+                            try //СЃС‡РёС‚Р°С‚СЊ РІРІРµРґРµРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ Рё СЃРѕР·РґР°С‚СЊ РїР»Р°РЅРµС‚Сѓ РЅР° РёС… РѕСЃРЅРѕРІРµ
                             {
                                 sf::Vector2f pos(event.mouseButton.x, event.mouseButton.y);
                                 pos = window.mapPixelToCoords((sf::Vector2i)pos);
@@ -298,49 +298,49 @@ int main()
                         }
                     }
                 }
-                if (event.type == sf::Event::MouseButtonReleased) //если кнопка мыши отжата
+                if (event.type == sf::Event::MouseButtonReleased) //РµСЃР»Рё РєРЅРѕРїРєР° РјС‹С€Рё РѕС‚Р¶Р°С‚Р°
                 {
-                    if (event.mouseButton.button == sf::Mouse::Right) //если правая кнопка
+                    if (event.mouseButton.button == sf::Mouse::Right) //РµСЃР»Рё РїСЂР°РІР°СЏ РєРЅРѕРїРєР°
                     {
-                        isDrag = false; //перетаскивание окончено
+                        isDrag = false; //РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРµ РѕРєРѕРЅС‡РµРЅРѕ
                     }
                 }
             }
-            else //обработка событий в главном меню
+            else //РѕР±СЂР°Р±РѕС‚РєР° СЃРѕР±С‹С‚РёР№ РІ РіР»Р°РІРЅРѕРј РјРµРЅСЋ
             {
                 bool isSolar = false;
                 bool isSandbox = false;
                 bool isExit = false;
-                if (sandbox.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //если мышка находится над спрайтом sandbox
+                if (sandbox.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //РµСЃР»Рё РјС‹С€РєР° РЅР°С…РѕРґРёС‚СЃСЏ РЅР°Рґ СЃРїСЂР°Р№С‚РѕРј sandbox
                 {
-                    sandbox.setColor(sf::Color::Cyan); //изменить цвет на Cyan
+                    sandbox.setColor(sf::Color::Cyan); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Cyan
                     isSandbox = true;
                 }
                 else
                 {
-                    sandbox.setColor(sf::Color::White); //изменить цвет на белый
+                    sandbox.setColor(sf::Color::White); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Р±РµР»С‹Р№
                 }
-                if (exit.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //если мышка находится над спрайтом exit
+                if (exit.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //РµСЃР»Рё РјС‹С€РєР° РЅР°С…РѕРґРёС‚СЃСЏ РЅР°Рґ СЃРїСЂР°Р№С‚РѕРј exit
                 {
-                    exit.setColor(sf::Color::Cyan); //изменить цвет на Cyan
+                    exit.setColor(sf::Color::Cyan); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Cyan
                     isExit = true;
                 }
                 else
                 {
-                    exit.setColor(sf::Color::White); //изменить цвет на белый
+                    exit.setColor(sf::Color::White); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Р±РµР»С‹Р№
                 }
-                if (solar.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //если мышка находится над спрайтом solar
+                if (solar.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) //РµСЃР»Рё РјС‹С€РєР° РЅР°С…РѕРґРёС‚СЃСЏ РЅР°Рґ СЃРїСЂР°Р№С‚РѕРј solar
                 {
-                    solar.setColor(sf::Color::Cyan); //изменить цвет на Cyan
+                    solar.setColor(sf::Color::Cyan); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Cyan
                     isSolar = true;
                 }
                 else
                 {
-                    solar.setColor(sf::Color::White); //изменить цвет на белый
+                    solar.setColor(sf::Color::White); //РёР·РјРµРЅРёС‚СЊ С†РІРµС‚ РЅР° Р±РµР»С‹Р№
                 }
-                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) //если нажата левая кнопка мыши
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) //РµСЃР»Рё РЅР°Р¶Р°С‚Р° Р»РµРІР°СЏ РєРЅРѕРїРєР° РјС‹С€Рё
                 {
-                    if(isSolar) //установить соответствующему спрайту голубой цвет
+                    if(isSolar) //СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРјСѓ СЃРїСЂР°Р№С‚Сѓ РіРѕР»СѓР±РѕР№ С†РІРµС‚
                     {
                         solar.setColor(sf::Color::Blue);
                     }
@@ -353,64 +353,64 @@ int main()
                         exit.setColor(sf::Color::Blue);
                     }
                 }
-                if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) //если отжата левая кнопка
+                if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) //РµСЃР»Рё РѕС‚Р¶Р°С‚Р° Р»РµРІР°СЏ РєРЅРѕРїРєР°
                 {
                     if(isSolar)
                     {
-                        SetSolar(state); //инициализировать солнечную систему
+                        SetSolar(state); //РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ СЃРѕР»РЅРµС‡РЅСѓСЋ СЃРёСЃС‚РµРјСѓ
                     }
                     else if(isSandbox)
                     {
-                        state = State::SANDBOX; //установить режим SANDBOX
+                        state = State::SANDBOX; //СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЂРµР¶РёРј SANDBOX
                     }
                     else if(isExit)
                     {
-                        window.close(); //выйти из приложения
+                        window.close(); //РІС‹Р№С‚Рё РёР· РїСЂРёР»РѕР¶РµРЅРёСЏ
                     }
                 }
             }
         }
 
-        if(state == State::SOLAR || state == State::SANDBOX) //если статус приложение SOLAR или SANDBOX
+        if(state == State::SOLAR || state == State::SANDBOX) //РµСЃР»Рё СЃС‚Р°С‚СѓСЃ РїСЂРёР»РѕР¶РµРЅРёРµ SOLAR РёР»Рё SANDBOX
         {
 
-            double dt = (double)timer.getElapsedTime().asMicroseconds() / 1000000.0; //посчитать время прошедшее с прошлого кадра
-            timer.restart(); //рестарт таймера
-            mulStatusLabel->setText("x" + std::to_string((int)timerMultiplier->getValue())); //установка текущего умножения времени
+            double dt = (double)timer.getElapsedTime().asMicroseconds() / 1000000.0; //РїРѕСЃС‡РёС‚Р°С‚СЊ РІСЂРµРјСЏ РїСЂРѕС€РµРґС€РµРµ СЃ РїСЂРѕС€Р»РѕРіРѕ РєР°РґСЂР°
+            timer.restart(); //СЂРµСЃС‚Р°СЂС‚ С‚Р°Р№РјРµСЂР°
+            mulStatusLabel->setText("x" + std::to_string((int)timerMultiplier->getValue())); //СѓСЃС‚Р°РЅРѕРІРєР° С‚РµРєСѓС‰РµРіРѕ СѓРјРЅРѕР¶РµРЅРёСЏ РІСЂРµРјРµРЅРё
 
 
             for (int i = 0; i < planets.size(); i++)
             {
-                planets.at(i)->ResetA(); //установить планете нулевое ускорения для пересчёта
+                planets.at(i)->ResetA(); //СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР»Р°РЅРµС‚Рµ РЅСѓР»РµРІРѕРµ СѓСЃРєРѕСЂРµРЅРёСЏ РґР»СЏ РїРµСЂРµСЃС‡С‘С‚Р°
             }
 
-            for (int i = 0; i < planets.size(); i++) //расчёт влияния каждой планеты на каждую
+            for (int i = 0; i < planets.size(); i++) //СЂР°СЃС‡С‘С‚ РІР»РёСЏРЅРёСЏ РєР°Р¶РґРѕР№ РїР»Р°РЅРµС‚С‹ РЅР° РєР°Р¶РґСѓСЋ
             {
                 for (int j = 0; j < planets.size(); j++)
                 {
-                    if (i == j) //планета не влияет сама на себя
+                    if (i == j) //РїР»Р°РЅРµС‚Р° РЅРµ РІР»РёСЏРµС‚ СЃР°РјР° РЅР° СЃРµР±СЏ
                     {
                         continue;
                     }
                     try
                     {
-                        double distance = planets.at(i)->GetDistance(*planets.at(j)); //расчёт расстояния между планетами
-                        if(distance < planets.at(i)->d / 2 + planets.at(j)->d / 2) //если расстояние меньше суммы радиусов планет
+                        double distance = planets.at(i)->GetDistance(*planets.at(j)); //СЂР°СЃС‡С‘С‚ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ РјРµР¶РґСѓ РїР»Р°РЅРµС‚Р°РјРё
+                        if(distance < planets.at(i)->d / 2 + planets.at(j)->d / 2) //РµСЃР»Рё СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµРЅСЊС€Рµ СЃСѓРјРјС‹ СЂР°РґРёСѓСЃРѕРІ РїР»Р°РЅРµС‚
                         {
-                            if(planets.at(i)->mass <= planets.at(j)->mass) //если первая планета весит больше чем вторая
+                            if(planets.at(i)->mass <= planets.at(j)->mass) //РµСЃР»Рё РїРµСЂРІР°СЏ РїР»Р°РЅРµС‚Р° РІРµСЃРёС‚ Р±РѕР»СЊС€Рµ С‡РµРј РІС‚РѕСЂР°СЏ
                             {
-                                planets.at(j)->Union(*planets.at(i)); //объединить планеты
-                                DeleteAt(i); //удалить меньшую по массе
+                                planets.at(j)->Union(*planets.at(i)); //РѕР±СЉРµРґРёРЅРёС‚СЊ РїР»Р°РЅРµС‚С‹
+                                DeleteAt(i); //СѓРґР°Р»РёС‚СЊ РјРµРЅСЊС€СѓСЋ РїРѕ РјР°СЃСЃРµ
                             }
-                            else //если вторая планета весит больше чем первая
+                            else //РµСЃР»Рё РІС‚РѕСЂР°СЏ РїР»Р°РЅРµС‚Р° РІРµСЃРёС‚ Р±РѕР»СЊС€Рµ С‡РµРј РїРµСЂРІР°СЏ
                             {
-                                planets.at(i)->Union(*planets.at(j)); //объединить планеты
-                                DeleteAt(j); //удалить меньшую по массе
+                                planets.at(i)->Union(*planets.at(j)); //РѕР±СЉРµРґРёРЅРёС‚СЊ РїР»Р°РЅРµС‚С‹
+                                DeleteAt(j); //СѓРґР°Р»РёС‚СЊ РјРµРЅСЊС€СѓСЋ РїРѕ РјР°СЃСЃРµ
                             }
                         }
-                        else //если расстояние больше суммы радиусов
+                        else //РµСЃР»Рё СЂР°СЃСЃС‚РѕСЏРЅРёРµ Р±РѕР»СЊС€Рµ СЃСѓРјРјС‹ СЂР°РґРёСѓСЃРѕРІ
                         {
-                            planets.at(i)->Correct(*planets.at(j), distance); //внести влияние на ускорение одной планеты на друную
+                            planets.at(i)->Correct(*planets.at(j), distance); //РІРЅРµСЃС‚Рё РІР»РёСЏРЅРёРµ РЅР° СѓСЃРєРѕСЂРµРЅРёРµ РѕРґРЅРѕР№ РїР»Р°РЅРµС‚С‹ РЅР° РґСЂСѓРЅСѓСЋ
                         }
                     }
                     catch(std::exception){}
@@ -419,12 +419,12 @@ int main()
 
             for (int i = 0; i < planets.size(); i++)
             {
-                planets.at(i)->ChangePosition(dt, timerMultiplier->getValue()); //изменение позиции планеты по ускорению и множителю времени
-                planets.at(i)->Move(); //изменение позиций спрайтов
-                planets.at(i)->Rotate(dt, timerMultiplier->getValue()); //изменение вращения планеты по таймеру и множителю
+                planets.at(i)->ChangePosition(dt, timerMultiplier->getValue()); //РёР·РјРµРЅРµРЅРёРµ РїРѕР·РёС†РёРё РїР»Р°РЅРµС‚С‹ РїРѕ СѓСЃРєРѕСЂРµРЅРёСЋ Рё РјРЅРѕР¶РёС‚РµР»СЋ РІСЂРµРјРµРЅРё
+                planets.at(i)->Move(); //РёР·РјРµРЅРµРЅРёРµ РїРѕР·РёС†РёР№ СЃРїСЂР°Р№С‚РѕРІ
+                planets.at(i)->Rotate(dt, timerMultiplier->getValue()); //РёР·РјРµРЅРµРЅРёРµ РІСЂР°С‰РµРЅРёСЏ РїР»Р°РЅРµС‚С‹ РїРѕ С‚Р°Р№РјРµСЂСѓ Рё РјРЅРѕР¶РёС‚РµР»СЋ
             }
 
-            if (isDrag) //если установлен режим перемещения камеры
+            if (isDrag) //РµСЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅ СЂРµР¶РёРј РїРµСЂРµРјРµС‰РµРЅРёСЏ РєР°РјРµСЂС‹
             {
                 sf::Vector2f pos = (sf::Vector2f)(startPos - sf::Mouse::getPosition());
                 camera.setCenter(oldCenter + pos);
@@ -432,22 +432,22 @@ int main()
         }
 
         window.clear();
-        if(state == State::SOLAR || state == State::SANDBOX) //если установлен статус SOLAR или SANDBOX
+        if(state == State::SOLAR || state == State::SANDBOX) //РµСЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅ СЃС‚Р°С‚СѓСЃ SOLAR РёР»Рё SANDBOX
         {
             for (int i = 0; i < planets.size(); i++)
             {
-                window.draw(*planets.at(i)->sprite); //отрисовать все планеты
+                window.draw(planets.at(i)->sprite); //РѕС‚СЂРёСЃРѕРІР°С‚СЊ РІСЃРµ РїР»Р°РЅРµС‚С‹
             }
-            gui.draw(); //отрисовать интерфейс
+            gui.draw(); //РѕС‚СЂРёСЃРѕРІР°С‚СЊ РёРЅС‚РµСЂС„РµР№СЃ
         }
-        else //если статус MENU
+        else //РµСЃР»Рё СЃС‚Р°С‚СѓСЃ MENU
         {
-            window.draw(menu); //отрисовать спрайты меню
+            window.draw(menu); //РѕС‚СЂРёСЃРѕРІР°С‚СЊ СЃРїСЂР°Р№С‚С‹ РјРµРЅСЋ
             window.draw(sandbox);
             window.draw(solar);
             window.draw(exit);
         }
-        window.setView(camera); //установка камеры
+        window.setView(camera); //СѓСЃС‚Р°РЅРѕРІРєР° РєР°РјРµСЂС‹
         window.display();
     }
 

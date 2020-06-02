@@ -1,33 +1,35 @@
-#pragma once
+п»ї#pragma once
 #include <SFML/Graphics.hpp>
 
-//класс планеты
+//РєР»Р°СЃСЃ РїР»Р°РЅРµС‚С‹
 class Planet
 {
 private:
-    sf::Texture* texture; //тектура планеты
-    const double G = 6.67408E-11; //грав. постоянная
-    double rotation; //вращение планеты
+    sf::Texture texture; //С‚РµРєС‚СѓСЂР° РїР»Р°РЅРµС‚С‹
+    double G = 6.67408E-11; //РіСЂР°РІ. РїРѕСЃС‚РѕСЏРЅРЅР°СЏ
+    double rotation; //РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹
+    std::string filepath;
 
-    void InitSprite(); //инициализация спрайта
+    void InitSprite(); //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРїСЂР°Р№С‚Р°
 public:
-    sf::Sprite *sprite; //объект спрайта
-    sf::Vector2f* position; //позиция планеты
-    sf::Vector2f* v; //скорость планеты
-    sf::Vector2f* a; //ускорение планеты
-    double mass; //масса планеты
-    double d; //диаметр планеты
+    sf::Sprite sprite; //РѕР±СЉРµРєС‚ СЃРїСЂР°Р№С‚Р°
+    sf::Vector2f position; //РїРѕР·РёС†РёСЏ РїР»Р°РЅРµС‚С‹
+    sf::Vector2f v; //СЃРєРѕСЂРѕСЃС‚СЊ РїР»Р°РЅРµС‚С‹
+    sf::Vector2f a; //СѓСЃРєРѕСЂРµРЅРёРµ РїР»Р°РЅРµС‚С‹
+    double mass; //РјР°СЃСЃР° РїР»Р°РЅРµС‚С‹
+    double d; //РґРёР°РјРµС‚СЂ РїР»Р°РЅРµС‚С‹
 
-    Planet(sf::Texture texture, sf::Vector2f pos, double mass, double d, double rotation); //конструктор 1
-    Planet(sf::Texture texture, sf::Vector2f pos, sf::Vector2f v, sf::Vector2f a, double mass, double d, double rotation); //конструтор 2
-    static double ToMeter(double num); //перевод пикселей в метры
-    static double ToPixels(double num); //перевод метров в пиксели
-    void Union(Planet& other); //объединение планет
-    void ChangePosition(double dt, double mul); //изменение позиции
-    void Move(); //установка позиции спрайта
-    void ResetA(); //обнуление ускорения
-    void Correct(Planet& other, double distance); //добавить в ускорение влияение другой планеты
-    void Rotate(double dt, double mul); //изменить градус вращение планеты
-    double GetDistance(Planet& other); //получить расстояние между планетами
-    ~Planet(); //деструктор
+    Planet(std::string filepath, sf::Vector2f pos, double mass, double d, double rotation); //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ 1
+    Planet(std::string filepath, sf::Vector2f pos, sf::Vector2f v, sf::Vector2f a, double mass, double d, double rotation); //РєРѕРЅСЃС‚СЂСѓС‚РѕСЂ 2
+    Planet(const Planet &other); //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
+    static double ToMeter(double num); //РїРµСЂРµРІРѕРґ РїРёРєСЃРµР»РµР№ РІ РјРµС‚СЂС‹
+    static double ToPixels(double num); //РїРµСЂРµРІРѕРґ РјРµС‚СЂРѕРІ РІ РїРёРєСЃРµР»Рё
+    void Union(Planet& other); //РѕР±СЉРµРґРёРЅРµРЅРёРµ РїР»Р°РЅРµС‚
+    void ChangePosition(double dt, double mul); //РёР·РјРµРЅРµРЅРёРµ РїРѕР·РёС†РёРё
+    void Move(); //СѓСЃС‚Р°РЅРѕРІРєР° РїРѕР·РёС†РёРё СЃРїСЂР°Р№С‚Р°
+    void ResetA(); //РѕР±РЅСѓР»РµРЅРёРµ СѓСЃРєРѕСЂРµРЅРёСЏ
+    void Correct(Planet& other, double distance); //РґРѕР±Р°РІРёС‚СЊ РІ СѓСЃРєРѕСЂРµРЅРёРµ РІР»РёСЏРµРЅРёРµ РґСЂСѓРіРѕР№ РїР»Р°РЅРµС‚С‹
+    void Rotate(double dt, double mul); //РёР·РјРµРЅРёС‚СЊ РіСЂР°РґСѓСЃ РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹
+    double GetDistance(Planet& other); //РїРѕР»СѓС‡РёС‚СЊ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РїР»Р°РЅРµС‚Р°РјРё
+    ~Planet(); //РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 };

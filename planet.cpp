@@ -1,154 +1,168 @@
-#include "planet.hpp"
+п»ї#include "planet.hpp"
 
-//перевод пикселей в метры
-//выходные данные - количество метров в num пикселях
-//входные данные
-//num - количество пикселей
+//РїРµСЂРµРІРѕРґ РїРёРєСЃРµР»РµР№ РІ РјРµС‚СЂС‹
+//РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ - РєРѕР»РёС‡РµСЃС‚РІРѕ РјРµС‚СЂРѕРІ РІ num РїРёРєСЃРµР»СЏС…
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//num - РєРѕР»РёС‡РµСЃС‚РІРѕ РїРёРєСЃРµР»РµР№
 double Planet::ToMeter(double num)
 {
     return num * 1000000000;
 }
 
-//перевод метров в пиксели
-//выходные данные - количество пикселей в num метрах
-//входные данные
-//num - количество метров
+//РїРµСЂРµРІРѕРґ РјРµС‚СЂРѕРІ РІ РїРёРєСЃРµР»Рё
+//РІС‹С…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ - РєРѕР»РёС‡РµСЃС‚РІРѕ РїРёРєСЃРµР»РµР№ РІ num РјРµС‚СЂР°С…
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//num - РєРѕР»РёС‡РµСЃС‚РІРѕ РјРµС‚СЂРѕРІ
 double Planet::ToPixels(double num)
 {
     return num / 1000000000;
 }
 
-//инициализация спрайта
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃРїСЂР°Р№С‚Р°
 void Planet::InitSprite()
 {
-    texture->setSmooth(true); //добавление размытия
-    sprite = new sf::Sprite(*texture); //добавление текстуры спрайту
-    double h = texture->getSize().y;
+    texture.setSmooth(true); //РґРѕР±Р°РІР»РµРЅРёРµ СЂР°Р·РјС‹С‚РёСЏ
+    sprite = sf::Sprite(texture); //РґРѕР±Р°РІР»РµРЅРёРµ С‚РµРєСЃС‚СѓСЂС‹ СЃРїСЂР°Р№С‚Сѓ
+    double h = texture.getSize().y;
     double coef = d / h;
-    sprite->setScale(coef, coef); //изменение размера с учётом диаметра
-    sprite->setOrigin(texture->getSize().x / 2, texture->getSize().y / 2); //установка центра вращения на центр спрайта
+    sprite.setScale(coef, coef); //РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° СЃ СѓС‡С‘С‚РѕРј РґРёР°РјРµС‚СЂР°
+    sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2); //СѓСЃС‚Р°РЅРѕРІРєР° С†РµРЅС‚СЂР° РІСЂР°С‰РµРЅРёСЏ РЅР° С†РµРЅС‚СЂ СЃРїСЂР°Р№С‚Р°
 }
 
-//конструктор 1
-//входные данные
-//texture - текстура планеты
-//pos - позиция планеты
-//mass - масса планеты
-//d - диаметр планеты
-//rotation - вращение планеты в с
-Planet::Planet(sf::Texture texture, sf::Vector2f pos, double mass, double d, double rotation)
+//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ 1
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//texture - С‚РµРєСЃС‚СѓСЂР° РїР»Р°РЅРµС‚С‹
+//pos - РїРѕР·РёС†РёСЏ РїР»Р°РЅРµС‚С‹
+//mass - РјР°СЃСЃР° РїР»Р°РЅРµС‚С‹
+//d - РґРёР°РјРµС‚СЂ РїР»Р°РЅРµС‚С‹
+//rotation - РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹ РІ СЃ
+Planet::Planet(std::string filepath, sf::Vector2f pos, double mass, double d, double rotation)
 {
-    this->position = new sf::Vector2f(pos);
-    this->v = new sf::Vector2f(0, 0);
-    this->a = new sf::Vector2f(0, 0);
+    this->position = sf::Vector2f(pos);
+    this->v =  sf::Vector2f(0, 0);
+    this->a =  sf::Vector2f(0, 0);
     this->mass = mass;
     this->d = d;
+    this->filepath = filepath;
     this->rotation = rotation;
-    this->texture = new sf::Texture(texture);
+    this->texture.loadFromFile(filepath);
     InitSprite();
 }
 
-//конструктор 2
-//входные данные
-//texture - текстура планеты
-//pos - позиция планеты
-//v - скорость планеты
-//a - ускорение планеты
-//mass - масса планеты
-//d - диаметр планеты
-//rotation - вращение планеты в с
-Planet::Planet(sf::Texture texture, sf::Vector2f pos, sf::Vector2f v, sf::Vector2f a, double mass, double d, double rotation)
+//РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ 2
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//texture - С‚РµРєСЃС‚СѓСЂР° РїР»Р°РЅРµС‚С‹
+//pos - РїРѕР·РёС†РёСЏ РїР»Р°РЅРµС‚С‹
+//v - СЃРєРѕСЂРѕСЃС‚СЊ РїР»Р°РЅРµС‚С‹
+//a - СѓСЃРєРѕСЂРµРЅРёРµ РїР»Р°РЅРµС‚С‹
+//mass - РјР°СЃСЃР° РїР»Р°РЅРµС‚С‹
+//d - РґРёР°РјРµС‚СЂ РїР»Р°РЅРµС‚С‹
+//rotation - РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹ РІ СЃ
+Planet::Planet(std::string filepath, sf::Vector2f pos, sf::Vector2f v, sf::Vector2f a, double mass, double d, double rotation)
 {
-    this->position = new sf::Vector2f(pos);
-    this->v = new sf::Vector2f(v);
-    this->a = new sf::Vector2f(a);
+    this->position =  sf::Vector2f(pos);
+    this->v =  sf::Vector2f(v);
+    this->a =  sf::Vector2f(a);
     this->mass = mass;
     this->d = d;
+    this->filepath = filepath;
     this->rotation = rotation;
-    this->texture = new sf::Texture(texture);
+    this->texture.loadFromFile(filepath);
     InitSprite();
 }
 
-//объединение планет
-//входные данные
-//other - ссылка на вторую планету
+Planet::Planet(const Planet &other)
+{
+    this->filepath = other.filepath;
+    sf::Texture t;
+    t.loadFromFile(filepath);
+    this->texture = sf::Texture(t);
+    this->rotation = other.rotation;
+    this->G = other.G;
+    this->position = sf::Vector2f(other.position);
+    this->v = sf::Vector2f(other.v);
+    this->a = sf::Vector2f(other.a);
+    this->mass = other.mass;
+    this->d = other.d;
+    InitSprite();
+}
+
+//РѕР±СЉРµРґРёРЅРµРЅРёРµ РїР»Р°РЅРµС‚
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//other - СЃСЃС‹Р»РєР° РЅР° РІС‚РѕСЂСѓСЋ РїР»Р°РЅРµС‚Сѓ
 void Planet::Union(Planet &other)
 {
-    v->x = (mass * v->x + other.mass * other.v->x) / (mass + other.mass); //расчёт скорости после столкновения по формуле неупругого удара
-    v->y = (mass * v->y + other.mass * other.v->y) / (mass + other.mass);
+    v.x = (mass * v.x + other.mass * other.v.x) / (mass + other.mass); //СЂР°СЃС‡С‘С‚ СЃРєРѕСЂРѕСЃС‚Рё РїРѕСЃР»Рµ СЃС‚РѕР»РєРЅРѕРІРµРЅРёСЏ РїРѕ С„РѕСЂРјСѓР»Рµ РЅРµСѓРїСЂСѓРіРѕРіРѕ СѓРґР°СЂР°
+    v.y = (mass * v.y + other.mass * other.v.y) / (mass + other.mass);
 
-    double c = (mass + other.mass) / mass; //расчёт коэффициента изменения диаметра
+    double c = (mass + other.mass) / mass; //СЂР°СЃС‡С‘С‚ РєРѕСЌС„С„РёС†РёРµРЅС‚Р° РёР·РјРµРЅРµРЅРёСЏ РґРёР°РјРµС‚СЂР°
 
     d *= c;
 
-    double h = texture->getSize().y;
+    double h = texture.getSize().y;
     double coef = d / h;
-    sprite->setScale(coef, coef); //изменение размера спрайта, согласно новому диаметру
+    sprite.setScale(coef, coef); //РёР·РјРµРЅРµРЅРёРµ СЂР°Р·РјРµСЂР° СЃРїСЂР°Р№С‚Р°, СЃРѕРіР»Р°СЃРЅРѕ РЅРѕРІРѕРјСѓ РґРёР°РјРµС‚СЂСѓ
 
-    mass += other.mass; //суммирование масс
+    mass += other.mass; //СЃСѓРјРјРёСЂРѕРІР°РЅРёРµ РјР°СЃСЃ
 }
 
-//изменение позиции планеты
-//входные данные
-//dt - время
-//mul - множитель времени
+//РёР·РјРµРЅРµРЅРёРµ РїРѕР·РёС†РёРё РїР»Р°РЅРµС‚С‹
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//dt - РІСЂРµРјСЏ
+//mul - РјРЅРѕР¶РёС‚РµР»СЊ РІСЂРµРјРµРЅРё
 void Planet::ChangePosition(double dt, double mul)
 {
     dt *= mul;
-    v->x += a->x * dt;
-    v->y += a->y * dt;
+    v.x += a.x * dt;
+    v.y += a.y * dt;
 
-    position->x += v->x * dt;
-    position->y += v->y * dt;
+    position.x += v.x * dt;
+    position.y += v.y * dt;
 }
 
-//установка текущей позиции планеты спрайту
+//СѓСЃС‚Р°РЅРѕРІРєР° С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё РїР»Р°РЅРµС‚С‹ СЃРїСЂР°Р№С‚Сѓ
 void Planet::Move()
 {
-    sprite->setPosition(*position);
+    sprite.setPosition(position);
 }
 
-//обнуление ускорения планеты
+//РѕР±РЅСѓР»РµРЅРёРµ СѓСЃРєРѕСЂРµРЅРёСЏ РїР»Р°РЅРµС‚С‹
 void Planet::ResetA()
 {
-    a->x = 0;
-    a->y = 0;
+    a.x = 0;
+    a.y = 0;
 }
 
-//добавление влияния другой планеты на ускорение
-//входные данные
-//other - ссылка на другую планету
-//distance - дистанция до планеты
+//РґРѕР±Р°РІР»РµРЅРёРµ РІР»РёСЏРЅРёСЏ РґСЂСѓРіРѕР№ РїР»Р°РЅРµС‚С‹ РЅР° СѓСЃРєРѕСЂРµРЅРёРµ
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//other - СЃСЃС‹Р»РєР° РЅР° РґСЂСѓРіСѓСЋ РїР»Р°РЅРµС‚Сѓ
+//distance - РґРёСЃС‚Р°РЅС†РёСЏ РґРѕ РїР»Р°РЅРµС‚С‹
 void Planet::Correct(Planet& other, double distance)
 {
     distance = ToMeter(distance);
-    a->x += ToPixels(G * other.mass * ToMeter((double)other.position->x - (double)position->x) / pow(distance, 3));
-    a->y += ToPixels(G * other.mass * ToMeter((double)other.position->y - (double)position->y) / pow(distance, 3));
+    a.x += ToPixels(G * other.mass * ToMeter((double)other.position.x - (double)position.x) / pow(distance, 3));
+    a.y += ToPixels(G * other.mass * ToMeter((double)other.position.y - (double)position.y) / pow(distance, 3));
 }
 
-//изменение градуса вращение планеты
-//входные данные
-//dt - время
-//mul - множитель времени
+//РёР·РјРµРЅРµРЅРёРµ РіСЂР°РґСѓСЃР° РІСЂР°С‰РµРЅРёРµ РїР»Р°РЅРµС‚С‹
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//dt - РІСЂРµРјСЏ
+//mul - РјРЅРѕР¶РёС‚РµР»СЊ РІСЂРµРјРµРЅРё
 void Planet::Rotate(double dt, double mul)
 {
-    sprite->rotate(rotation * dt * mul);
+    sprite.rotate(rotation * dt * mul);
 }
 
-//вычисление расстояние между планетами
-//входные данные
-//other - ссылка на другую планету
+//РІС‹С‡РёСЃР»РµРЅРёРµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РїР»Р°РЅРµС‚Р°РјРё
+//РІС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+//other - СЃСЃС‹Р»РєР° РЅР° РґСЂСѓРіСѓСЋ РїР»Р°РЅРµС‚Сѓ
 double Planet::GetDistance(Planet &other)
 {
-    return sqrt(pow((double)position->x - (double)other.position->x, 2) + pow((double)position->y - (double)other.position->y, 2));
+    return sqrt(pow((double)position.x - (double)other.position.x, 2) + pow((double)position.y - (double)other.position.y, 2));
 }
 
-//деструктор класса
+//РґРµСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР°
 Planet::~Planet()
 {
-    delete[] position;
-    delete[] v;
-    delete[] a;
-    delete texture;
-    delete[] sprite;
+
 }
