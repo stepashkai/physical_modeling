@@ -74,9 +74,8 @@ Planet::Planet(std::string filepath, sf::Vector2f pos, sf::Vector2f v, sf::Vecto
 Planet::Planet(const Planet &other)
 {
     this->filepath = other.filepath;
-    sf::Texture t;
-    t.loadFromFile(filepath);
-    this->texture = sf::Texture(t);
+    this->texture.loadFromFile(filepath);
+    //this->sprite = sf::Sprite(other.sprite);
     this->rotation = other.rotation;
     this->G = other.G;
     this->position = sf::Vector2f(other.position);
@@ -159,10 +158,4 @@ void Planet::Rotate(double dt, double mul)
 double Planet::GetDistance(Planet &other)
 {
     return sqrt(pow((double)position.x - (double)other.position.x, 2) + pow((double)position.y - (double)other.position.y, 2));
-}
-
-//деструктор класса
-Planet::~Planet()
-{
-
 }

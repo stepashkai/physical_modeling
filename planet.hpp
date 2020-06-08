@@ -5,7 +5,6 @@
 class Planet
 {
 private:
-    sf::Texture texture; //тектура планеты
     double G = 6.67408E-11; //грав. постоянная
     double rotation; //вращение планеты
     std::string filepath;
@@ -14,6 +13,7 @@ private:
 public:
     sf::Sprite sprite; //объект спрайта
     sf::Vector2f position; //позиция планеты
+    sf::Texture texture; //тектура планеты
     sf::Vector2f v; //скорость планеты
     sf::Vector2f a; //ускорение планеты
     double mass; //масса планеты
@@ -31,5 +31,4 @@ public:
     void Correct(Planet& other, double distance); //добавить в ускорение влияение другой планеты
     void Rotate(double dt, double mul); //изменить градус вращение планеты
     double GetDistance(Planet& other); //получить расстояние между планетами
-    ~Planet(); //деструктор
 };

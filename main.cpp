@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <list>
 #include "planet.hpp"
 #include <ctime>
 
@@ -14,7 +15,7 @@ enum State
 };
 
 
-std::vector<Planet*> planets; //коллекция планет
+std::list<Planet> planets; //коллекция планет
 sf::View defaultCamera; //позиция и размер камеры по умолчанию
 
 //создание планеты
@@ -30,35 +31,39 @@ sf::View defaultCamera; //позиция и размер камеры по ум�
 //d - диаметр планеты
 //rotation - вращение планеты
 //filepath - путь к фалу текстуры
-Planet *InitPlanet(double posX, double posY, double vX, double vY, double aX, double aY, double mass, double d, double rotation, std::string filepath)
+Planet InitPlanet(double posX, double posY, double vX, double vY, double aX, double aY, double mass, double d, double rotation, std::string filepath)
 {
     sf::Vector2f pos(posX, posY);
     sf::Vector2f v(vX, vY);
     sf::Vector2f a(aX, aY);
     sf::Texture texture;
     texture.loadFromFile(filepath);
-    Planet *planet = new Planet(filepath, pos, v, a, mass, d, rotation);
+    Planet planet(filepath, pos, v, a, mass, d, rotation);
     return planet;
 }
 
 //удаление планеты
 //входные данные
 //i - индекс планеты в векторе планет
-void DeleteAt(int i)
+void DeleteAt(std::list<Planet>::iterator it)
 {
-    if(i >= 0 && i < planets.size())
+    if(it != planets.end())
     {
-        delete planets.at(i);
-        planets.erase(planets.begin() + i);
+        it = planets.erase(it);
+    }
+    else
+    {
+        planets.pop_back();
     }
 }
 
-//удаление всех планет в векторе планет
+//удаление всех планет в листе планет
 void Clear()
 {
-    while(planets.size()> 0)
+    std::list<Planet>::iterator i = planets.begin();
+    while(planets.size() != 0)
     {
-        DeleteAt(0);
+        i = planets.erase(i);
     }
 }
 
@@ -215,7 +220,7 @@ int main()
     sf::Vector2i startPos;
     sf::Vector2f oldCenter;
     camera.setCenter(window.getSize().x / 2, window.getSize().y / 2);
-    planets.reserve(1000);
+    //planets.reserve(1000);
     defaultCamera = sf::View(camera);
 
 
@@ -228,9 +233,9 @@ int main()
 
 
 
-    for (int i = 0; i < planets.size(); i++)
+    for (std::list<Planet>::iterator planet = planets.begin(); planet != planets.end(); planet++)
     {
-        planets.at(i)->sprite.setPosition(planets.at(i)->position); //установка позиций спрайтов всех планет
+        planet->sprite.setPosition(planet->position); //установка позиций спрайтов всех планет
     }
 
     while (window.isOpen())
@@ -255,7 +260,7 @@ int main()
                     {
                         if (planets.size() > 0)
                         {
-                            DeleteAt(planets.size() - 1); //удалить последнюю планету
+                            DeleteAt(planets.end()); //удалить последнюю планету
                         }
                     }
                     if (event.key.code == sf::Keyboard::Escape) //если нажата Esc
@@ -379,49 +384,71 @@ int main()
             mulStatusLabel->setText("x" + std::to_string((int)timerMultiplier->getValue())); //установка текущего умножения времени
 
 
-            for (int i = 0; i < planets.size(); i++)
+            for (std::list<Planet>::iterator planet = planets.begin(); planet != planets.end(); planet++)
             {
-                planets.at(i)->ResetA(); //установить планете нулевое ускорения для пересчёта
+                planet->ResetA(); //установить планете нулевое ускорения для пересчёта
             }
 
-            for (int i = 0; i < planets.size(); i++) //расчёт влияния каждой планеты на каждую
+            for (std::list<Planet>::iterator planetI = planets.begin(); planetI != planets.end(); planetI++) //расчёт влияния каждой планеты на каждую
             {
-                for (int j = 0; j < planets.size(); j++)
+                for (std::list<Planet>::iterator planetJ = planets.begin(); planetJ != planets.end(); planetJ++)
                 {
-                    if (i == j) //планета не влияет сама на себя
+                    if (planetI == planetJ) //планета не влияет сама на себя
                     {
                         continue;
                     }
                     try
                     {
-                        double distance = planets.at(i)->GetDistance(*planets.at(j)); //расчёт расстояния между планетами
-                        if(distance < planets.at(i)->d / 2 + planets.at(j)->d / 2) //если расстояние меньше суммы радиусов планет
+                        double distance = planetI->GetDistance(*planetJ); //расчёт расстояния между планетами
+                        if(distance < planetI->d / 2 + planetJ->d / 2) //если расстояние меньше суммы радиусов планет
                         {
-                            if(planets.at(i)->mass <= planets.at(j)->mass) //если первая планета весит больше чем вторая
+                            if(planetI->mass <= planetJ->mass) //если первая планета весит больше чем вторая
                             {
-                                planets.at(j)->Union(*planets.at(i)); //объединить планеты
-                                DeleteAt(i); //удалить меньшую по массе
+                                planetJ->Union(*planetI); //объединить планеты
+                                if(planetI != planets.end())
+                                {
+                                    planetI = planets.erase(planetI);
+                                    if(planetI != planets.begin())
+                                    {
+                                        planetI--;
+                                    }
+                                }
+                                else
+                                {
+                                    planets.pop_back();
+                                }
                             }
                             else //если вторая планета весит больше чем первая
                             {
-                                planets.at(i)->Union(*planets.at(j)); //объединить планеты
-                                DeleteAt(j); //удалить меньшую по массе
+                                planetI->Union(*planetJ); //объединить планеты
+                                if(planetJ != planets.end())
+                                {
+                                    planetJ = planets.erase(planetJ);
+                                    if(planetJ != planets.begin())
+                                    {
+                                        planetJ--;
+                                    }
+                                }
+                                else
+                                {
+                                    planets.pop_back();
+                                }
                             }
                         }
                         else //если расстояние больше суммы радиусов
                         {
-                            planets.at(i)->Correct(*planets.at(j), distance); //внести влияние на ускорение одной планеты на друную
+                            planetI->Correct(*planetJ, distance); //внести влияние на ускорение одной планеты на друную
                         }
                     }
                     catch(std::exception){}
                 }
             }
 
-            for (int i = 0; i < planets.size(); i++)
+            for (std::list<Planet>::iterator planet = planets.begin(); planet != planets.end(); planet++)
             {
-                planets.at(i)->ChangePosition(dt, timerMultiplier->getValue()); //изменение позиции планеты по ускорению и множителю времени
-                planets.at(i)->Move(); //изменение позиций спрайтов
-                planets.at(i)->Rotate(dt, timerMultiplier->getValue()); //изменение вращения планеты по таймеру и множителю
+                planet->ChangePosition(dt, timerMultiplier->getValue()); //изменение позиции планеты по ускорению и множителю времени
+                planet->Move(); //изменение позиций спрайтов
+                planet->Rotate(dt, timerMultiplier->getValue()); //изменение вращения планеты по таймеру и множителю
             }
 
             if (isDrag) //если установлен режим перемещения камеры
@@ -434,9 +461,12 @@ int main()
         window.clear();
         if(state == State::SOLAR || state == State::SANDBOX) //если установлен статус SOLAR или SANDBOX
         {
-            for (int i = 0; i < planets.size(); i++)
+            if(planets.size() != 0)
             {
-                window.draw(planets.at(i)->sprite); //отрисовать все планеты
+                for (std::list<Planet>::iterator planet = planets.begin(); planet != planets.end(); planet++)
+                {
+                    window.draw(planet->sprite); //отрисовать все планеты
+                }
             }
             gui.draw(); //отрисовать интерфейс
         }
